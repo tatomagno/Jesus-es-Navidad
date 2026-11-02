@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Papá Noel Invisible - ¡Navidad es Jesús!</title>
+  <meta name="description" content="Sorteo sorpresa de Papá Noel Invisible. Tocá tu nombre y descubrí a quién te toca hacerle un regalo en esta Navidad." />
+  <meta property="og:title" content="🎄 Sorteo Papá Noel Invisible - ¡Navidad es Jesús!" />
+  <meta property="og:description" content="Entrá al link, elegí tu nombre y descubrí de forma secreta a quién te toca regalarle." />
+  <meta property="og:image" content="sorteo navidad.jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Fondo ambiental con la imagen difuminada y nieve animada -->
+  <div class="bg-backdrop" aria-hidden="true"></div>
+  <canvas id="snow-canvas" aria-hidden="true"></canvas>
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+  <main class="app-container">
+    <!-- Cabecera con la imagen principal -->
+    <header class="hero-header">
+      <div class="hero-image-wrapper">
+        <div class="halo-glow"></div>
+        <img src="sorteo navidad.jpeg" alt="¡Navidad es Jesús!" class="hero-image" id="hero-img" />
+        <div class="hero-badge">✨ Papá Noel Invisible ✨</div>
+      </div>
+      <h1 class="app-title" id="event-title-display">¡Navidad es Jesús!</h1>
+      <p class="app-subtitle" id="event-note-display">Sorteo sorpresa de regalos navideños</p>
+    </header>
+
+    <!-- ==========================================
+         VISTA 1: MODO ORGANIZADOR (CARGAR NOMBRES)
+         ========================================== -->
+    <section id="view-organizer" class="card-panel">
+      <div class="panel-header">
+        <h2>🎅 Armar el Sorteo</h2>
+        <p>Cargá los nombres de todos los participantes. El sistema armará una cadena secreta donde nadie se repite y nadie se queda sin regalo.</p>
+      </div>
+
+      <div class="form-group">
+        <label for="event-title-input">Nombre del grupo o festejo (opcional)</label>
+        <input type="text" id="event-title-input" class="text-input" placeholder="Ej: Navidad en Familia 2026" maxlength="60" />
+      </div>
+
+      <div class="form-group">
+        <label for="event-note-input">Mensaje o presupuesto sugerido (opcional)</label>
+        <input type="text" id="event-note-input" class="text-input" placeholder="Ej: Presupuesto aprox. $15.000 - ¡Que sea sorpresa!" maxlength="120" />
+      </div>
+
+      <div class="form-group">
+        <label for="participant-input">Agregar participantes <span id="participant-count-badge" class="count-badge">0 cargados</span></label>
+        <div class="add-row">
+          <input type="text" id="participant-input" class="text-input" placeholder="Escribí un nombre y presioná Enter..." autocomplete="off" />
+          <button type="button" id="btn-add-participant" class="btn btn-gold" title="Agregar participante">
+            + Agregar
+          </button>
+        </div>
+        <button type="button" id="btn-toggle-bulk" class="btn-link">
+          📋 ¿Tenés una lista de WhatsApp? Pegar varios nombres juntos
+        </button>
+        <div id="bulk-paste-box" class="bulk-box hidden">
+          <textarea id="bulk-textarea" class="text-input" rows="4" placeholder="Pegá acá los nombres separados por coma o uno debajo del otro..."></textarea>
+          <button type="button" id="btn-confirm-bulk" class="btn btn-secondary btn-sm">Cargar todos a la lista</button>
+        </div>
+      </div>
+
+      <!-- Lista de participantes cargados -->
+      <div id="participants-list-container" class="participants-chips-wrapper">
+        <p class="empty-hint" id="empty-participants-hint">Todavía no agregaste participantes. Cargá al menos 3 nombres para empezar.</p>
+        <ul id="participants-chips" class="chips-list"></ul>
+      </div>
+
+      <!-- Opciones extra de privacidad -->
+      <div class="privacy-box">
+        <label class="checkbox-label">
+          <input type="checkbox" id="chk-use-pins" />
+          <span>🔐 <strong>Proteger con PIN de 4 dígitos (opcional):</strong> Le asigna una clave corta a cada persona para que nadie pueda tocar otro nombre por curiosidad.</span>
+        </label>
+      </div>
+
+      <div id="organizer-error" class="alert-error hidden"></div>
+
+      <button type="button" id="btn-generate-draw" class="btn btn-primary btn-large">
+        🎁 ¡Realizar Sorteo y Crear Link!
+      </button>
+    </section>
+
+    <!-- ==========================================
+         VISTA 2: SORTEO LISTO PARA COMPARTIR
+         ========================================== -->
+    <section id="view-share" class="card-panel hidden">
+      <div class="panel-header">
+        <div class="success-icon">🎉</div>
+        <h2>¡Sorteo Creado con Éxito!</h2>
+        <p>Ya está todo sorteado en secreto. Nadie se repite y todos reciben un regalo.</p>
+      </div>
+
+      <!-- Advertencia si se está abriendo como archivo local file:// -->
+      <div id="local-file-warning" class="alert-warning hidden">
+        <strong>💡 Atención: Estás abriendo la app desde una carpeta de tu PC (`file://`)</strong>
+        <p>Para que el link funcione en los celulares de los demás por WhatsApp, tenés dos opciones muy fáciles:</p>
+        <ul>
+          <li><strong>Opción 1 (Subir gratis en 10 segundos):</strong> Arrastrá la carpeta <code>sorteo</code> a <a href="https://app.netlify.com/drop" target="_blank" rel="noopener">Netlify Drop</a> o subila a GitHub Pages / Vercel. Si pegás abajo la dirección web donde la subiste, el link se actualiza solo:</li>
+        </ul>
+        <input type="url" id="custom-base-url" class="text-input mt-2" placeholder="Ej: https://mi-sorteo-navidad.netlify.app" />
+      </div>
+
+      <!-- Bloque principal: Link Único General para el Grupo -->
+      <div class="share-box highlight-share">
+        <h3>🌟 Link Único para el Grupo de WhatsApp</h3>
+        <p class="share-desc">Mandá este único enlace al grupo. Cada persona entra desde su celular, toca su nombre y descubre a quién le regala:</p>
+        
+        <div class="url-copy-row">
+          <input type="text" id="group-share-url" class="text-input url-input" readonly />
+          <button type="button" id="btn-copy-group-url" class="btn btn-gold">
+            📋 Copiar Link
+          </button>
+        </div>
+
+        <div class="share-actions-row">
+          <a id="btn-whatsapp-group" href="#" target="_blank" rel="noopener" class="btn btn-whatsapp">
+            📲 Enviar al Grupo de WhatsApp
+          </a>
+          <button type="button" id="btn-preview-group" class="btn btn-secondary">
+            👀 Probar cómo lo ven ellos
+          </button>
+        </div>
+      </div>
+
+      <!-- Si activó PINs o si quiere links individuales -->
+      <div class="individual-links-section">
+        <button type="button" id="btn-toggle-individual" class="btn-accordion">
+          <span>🔒 Ver links individuales por persona <span id="pins-indicator-text"></span></span>
+          <span class="chevron">▼</span>
+        </button>
+        <div id="individual-links-list" class="individual-list hidden">
+          <p class="small-note">También podés mandarle a cada uno su link personal por privado (al abrirlo, va directo a su nombre sin que pueda ver a los demás):</p>
+          <ul id="individual-items-ul" class="ind-ul"></ul>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="footer-actions">
+        <button type="button" id="btn-new-draw" class="btn btn-outline-danger btn-sm">
+          🔄 Empezar un sorteo nuevo desde cero
+        </button>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VISTA 3: MODO PARTICIPANTE (ELEGIR NOMBRE)
+         ========================================== -->
+    <section id="view-participant-list" class="card-panel hidden">
+      <div class="panel-header">
+        <h2>🎄 ¿Quién sos?</h2>
+        <p>Tocá <strong>únicamente tu nombre</strong> en la lista para descubrir a quién te toca hacerle un regalo en esta Navidad.</p>
+      </div>
+
+      <!-- Aviso si este celular ya abrió un sobre antes -->
+      <div id="already-opened-banner" class="saved-device-banner hidden">
+        <div>
+          <strong>📱 En este celular ya abriste el sobre de <span id="saved-person-name"></span></strong>
+          <p>Tocá el botón para volver a ver a quién te tocó regalarle.</p>
+        </div>
+        <button type="button" id="btn-reopen-saved" class="btn btn-gold btn-sm">Ver mi asignado</button>
+      </div>
+
+      <div class="search-filter-box" id="participant-search-box">
+        <input type="text" id="search-participant-input" class="text-input" placeholder="🔍 Buscar mi nombre..." />
+      </div>
+
+      <div id="participant-buttons-grid" class="participant-grid"></div>
+
+      <div class="divider"></div>
+      <div class="footer-actions">
+        <button type="button" id="btn-go-organizer" class="btn-link">
+          ⚙️ ¿Sos el organizador? Crear un nuevo sorteo
+        </button>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VISTA 4: REVELACIÓN SORPRESA DEL REGALO
+         ========================================== -->
+    <section id="view-reveal" class="card-panel hidden">
+      <div class="reveal-header">
+        <span class="greeting-pill">Hola, <strong id="reveal-giver-name"></strong> ✨</span>
+        <h2>Tu Misión de Navidad</h2>
+      </div>
+
+      <!-- Estado 1: Caja de regalo cerrada lista para tocar -->
+      <div id="gift-closed-stage" class="gift-stage">
+        <p class="stage-instruction">Tocá el regalo luminoso para abrir tu sobre secreto:</p>
+        <button type="button" id="btn-open-gift" class="gift-box-btn" aria-label="Abrir sobre secreto">
+          <div class="gift-sparkles">✨ ⭐ ✨</div>
+          <div class="gift-icon-big">🎁</div>
+          <span class="gift-tap-label">¡Tocar para descubrir!</span>
+        </button>
+        <p class="secret-warning">🤫 Asegurate de que nadie esté mirando tu pantalla</p>
+      </div>
+
+      <!-- Estado 2: Resultado revelado -->
+      <div id="gift-opened-stage" class="gift-result-stage hidden">
+        <p class="result-pre">En esta Navidad le vas a hacer un regalo a:</p>
+        <div class="receiver-card">
+          <div class="receiver-stars">🌟 🎄 🌟</div>
+          <div class="receiver-name" id="reveal-receiver-name">---</div>
+          <p class="receiver-blessing">¡Que sea una hermosa sorpresa! Guardá el secreto hasta el día de Navidad.</p>
+        </div>
+
+        <div class="reveal-actions">
+          <button type="button" id="btn-download-ticket" class="btn btn-gold">
+            📥 Guardar tarjeta recordatorio en mi celu
+          </button>
+          <button type="button" id="btn-hide-result" class="btn btn-secondary">
+            🙈 Ocultar nombre en pantalla
+          </button>
+        </div>
+
+        <div class="other-person-link-wrap">
+          <button type="button" id="btn-back-to-list" class="btn-link">
+            ← Volver a la lista de participantes
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================
+       MODAL DE CONFIRMACIÓN DE IDENTIDAD (+ PIN)
+       ========================================== -->
+  <div id="confirm-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-icon">🎅</div>
+      <h3>¿Confirmás que sos <span id="modal-person-name" class="gold-text"></span>?</h3>
+      <p class="modal-text">Recordá que la magia del Papá Noel Invisible es que sea <strong>100% sorpresa</strong>. Solo abrí tu propio nombre.</p>
+
+      <div id="modal-pin-section" class="modal-pin-box hidden">
+        <label for="modal-pin-input">🔐 Ingresá tu PIN de 4 dígitos:</label>
+        <input type="tel" id="modal-pin-input" class="text-input pin-input" placeholder="0000" maxlength="4" pattern="[0-9]*" inputmode="numeric" />
+        <p id="modal-pin-error" class="pin-error hidden">PIN incorrecto. Pedíselo al organizador del sorteo.</p>
+      </div>
+
+      <div class="modal-buttons">
+        <button type="button" id="btn-modal-cancel" class="btn btn-secondary">No, volver</button>
+        <button type="button" id="btn-modal-confirm" class="btn btn-primary">¡Sí, soy yo! Ver mi sobre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast de notificaciones -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
