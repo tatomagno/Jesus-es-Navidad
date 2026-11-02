@@ -1,6 +1,6 @@
 :root {
   --bg-deep: #0b0f29;
-  --bg-card: rgba(19, 25, 62, 0.82);
+  --bg-card: rgba(19, 25, 62, 0.85);
   --bg-card-border: rgba(251, 191, 36, 0.35);
   --gold-light: #fde68a;
   --gold: #fbbf24;
@@ -65,7 +65,7 @@ body {
 
 .app-container {
   width: 100%;
-  max-width: 540px;
+  max-width: 560px;
   margin: 0 auto;
   padding: 1.25rem 1rem 2rem;
 }
@@ -78,7 +78,7 @@ body {
 
 .hero-image-wrapper {
   position: relative;
-  width: 220px;
+  width: 215px;
   margin: 0 auto 0.9rem;
   border-radius: 20px;
   padding: 5px;
@@ -188,10 +188,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 600;
   color: var(--gold-light);
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.4rem;
 }
 
 .count-badge {
@@ -205,12 +205,12 @@ body {
 
 .text-input {
   width: 100%;
-  background: rgba(9, 13, 38, 0.75);
+  background: rgba(9, 13, 38, 0.78);
   border: 1.5px solid rgba(148, 163, 184, 0.35);
   border-radius: var(--radius-md);
-  padding: 0.75rem 0.9rem;
+  padding: 0.72rem 0.9rem;
   color: #fff;
-  font-size: 0.96rem;
+  font-size: 0.95rem;
   font-family: inherit;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -221,9 +221,34 @@ body {
   box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
 }
 
+.input-sm {
+  padding: 0.55rem 0.75rem;
+  font-size: 0.86rem;
+  border-radius: 10px;
+}
+
+.add-person-box {
+  background: rgba(8, 11, 32, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .add-row {
   display: flex;
   gap: 0.5rem;
+}
+
+.add-optional-row {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.pin-custom-input {
+  max-width: 155px;
 }
 
 .btn {
@@ -358,9 +383,15 @@ body {
   color: #fff;
   padding: 0.38rem 0.7rem;
   border-radius: 999px;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 600;
   animation: popIn 0.2s ease-out;
+}
+
+.chip-meta {
+  font-size: 0.75rem;
+  color: var(--gold-light);
+  opacity: 0.9;
 }
 
 @keyframes popIn {
@@ -388,33 +419,62 @@ body {
   color: #fff;
 }
 
+/* Privacidad / Opciones de Clave */
 .privacy-box {
   background: rgba(251, 191, 36, 0.08);
-  border: 1px solid rgba(251, 191, 36, 0.25);
+  border: 1px solid rgba(251, 191, 36, 0.28);
   border-radius: var(--radius-md);
-  padding: 0.75rem 0.85rem;
-  margin-bottom: 1rem;
+  padding: 0.85rem;
+  margin-bottom: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
 }
 
-.checkbox-label {
+.privacy-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--gold-light);
+}
+
+.radio-option {
   display: flex;
   align-items: flex-start;
-  gap: 0.6rem;
-  font-size: 0.84rem;
+  gap: 0.55rem;
+  font-size: 0.83rem;
   color: var(--text-muted);
   cursor: pointer;
   line-height: 1.4;
 }
 
-.checkbox-label input {
-  margin-top: 0.2rem;
+.radio-option input {
+  margin-top: 0.22rem;
   accent-color: var(--gold);
-  width: 17px;
-  height: 17px;
 }
 
-.checkbox-label strong {
+.radio-option strong {
+  color: #fff;
+}
+
+.cloud-sync-details {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 1rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.cloud-sync-details summary {
+  cursor: pointer;
+  font-weight: 600;
   color: var(--gold-light);
+}
+
+.cloud-sync-body {
+  margin-top: 0.55rem;
+  line-height: 1.4;
 }
 
 /* Alertas */
@@ -440,17 +500,13 @@ body {
   line-height: 1.45;
 }
 
-.alert-warning ul {
-  margin: 0.45rem 0 0.45rem 1.2rem;
-}
-
 .alert-warning a {
   color: var(--gold);
   font-weight: 700;
 }
 
 .mt-2 {
-  margin-top: 0.5rem;
+  margin-top: 0.55rem;
 }
 
 /* Vista de Compartir */
@@ -565,8 +621,9 @@ body {
 }
 
 .ind-pin {
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   color: var(--gold);
+  font-weight: 600;
 }
 
 .ind-actions {
@@ -605,27 +662,28 @@ body {
 
 .participant-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 0.65rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
 }
 
 .participant-card-btn {
   background: linear-gradient(145deg, rgba(30, 39, 97, 0.88), rgba(17, 24, 68, 0.95));
   border: 1.5px solid rgba(251, 191, 36, 0.38);
   border-radius: var(--radius-md);
-  padding: 0.9rem 0.65rem;
+  padding: 0.85rem 0.6rem;
   color: #fff;
   font-family: inherit;
   font-weight: 700;
-  font-size: 0.96rem;
+  font-size: 0.95rem;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.3rem;
   transition: transform 0.15s, border-color 0.2s, box-shadow 0.2s;
   text-align: center;
+  position: relative;
 }
 
 .participant-card-btn:hover {
@@ -635,7 +693,62 @@ body {
 }
 
 .participant-card-btn .avatar-emoji {
-  font-size: 1.55rem;
+  font-size: 1.5rem;
+}
+
+.lock-status-pill {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.12rem 0.45rem;
+  border-radius: 99px;
+  background: rgba(251, 191, 36, 0.15);
+  color: var(--gold-light);
+}
+
+/* Cartelera de Talles y Deseos del Grupo */
+.wishes-board-box {
+  background: rgba(8, 11, 32, 0.6);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-top: 0.5rem;
+}
+
+.wishes-board-header h3 {
+  font-size: 1rem;
+  color: var(--gold-light);
+  margin-bottom: 0.25rem;
+}
+
+.wishes-board-header p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.wishes-ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.wish-li {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 3px solid var(--gold);
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.wish-li strong {
+  color: var(--gold-light);
+}
+
+.wish-li .wish-empty {
+  color: #94a3b8;
+  font-style: italic;
 }
 
 /* Vista 4: Revelación del Regalo */
@@ -667,8 +780,8 @@ body {
 }
 
 .gift-box-btn {
-  width: 210px;
-  height: 210px;
+  width: 205px;
+  height: 205px;
   margin: 0 auto 1rem;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(220, 38, 38, 0.95) 0%, rgba(153, 27, 27, 0.98) 70%);
@@ -702,14 +815,14 @@ body {
 }
 
 .gift-icon-big {
-  font-size: 4.4rem;
+  font-size: 4.3rem;
   line-height: 1;
   filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
 }
 
 .gift-tap-label {
   font-weight: 800;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--gold-light);
   text-transform: uppercase;
   letter-spacing: 0.03em;
@@ -738,39 +851,111 @@ body {
 }
 
 .receiver-card {
-  background: linear-gradient(135deg, rgba(153, 27, 27, 0.85) 0%, rgba(127, 29, 29, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(153, 27, 27, 0.9) 0%, rgba(127, 29, 29, 0.96) 100%);
   border: 2.5px solid var(--gold);
   border-radius: var(--radius-lg);
-  padding: 1.5rem 1rem;
-  margin-bottom: 1.2rem;
+  padding: 1.35rem 1rem;
+  margin-bottom: 1rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 30px rgba(251, 191, 36, 0.3);
 }
 
 .receiver-stars {
   font-size: 1.2rem;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.3rem;
 }
 
 .receiver-name {
   font-family: 'Cinzel Decorative', Georgia, serif;
-  font-size: 2.1rem;
+  font-size: 2.05rem;
   font-weight: 900;
   color: var(--gold-light);
   text-shadow: 0 3px 10px rgba(0, 0, 0, 0.65);
-  margin: 0.3rem 0 0.6rem;
+  margin: 0.25rem 0 0.75rem;
   word-break: break-word;
 }
 
+/* Tarjeta interna con los talles/deseos del agasajado */
+.receiver-wish-card {
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid rgba(253, 230, 138, 0.45);
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+  margin: 0.6rem auto 0.85rem;
+  text-align: left;
+}
+
+.receiver-wish-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  margin-bottom: 0.28rem;
+}
+
+.receiver-wish-content {
+  font-size: 0.9rem;
+  color: #fff;
+  line-height: 1.42;
+}
+
 .receiver-blessing {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: #fef3c7;
-  line-height: 1.4;
+  line-height: 1.35;
 }
 
 .reveal-actions {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.reveal-actions .btn {
+  flex: 1 1 180px;
+}
+
+/* Editor de Mis Propios Talles y Deseos */
+.my-wish-editor-card {
+  background: rgba(9, 13, 38, 0.72);
+  border: 1.5px solid rgba(251, 191, 36, 0.4);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1rem;
+  text-align: left;
+  margin-top: 0.5rem;
+}
+
+.my-wish-editor-card h3 {
+  font-size: 1.05rem;
+  color: var(--gold-light);
+  margin-bottom: 0.25rem;
+}
+
+.my-wish-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 0.85rem;
+  line-height: 1.38;
+}
+
+.wish-inputs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 0.6rem;
+}
+
+.wish-inputs-grid label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  margin-bottom: 0.3rem;
+}
+
+.wish-save-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 .other-person-link-wrap {
@@ -792,7 +977,7 @@ body {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(5, 8, 22, 0.82);
+  background: rgba(5, 8, 22, 0.85);
   backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
@@ -805,7 +990,7 @@ body {
   background: #141a42;
   border: 2px solid var(--gold);
   border-radius: var(--radius-lg);
-  max-width: 400px;
+  max-width: 410px;
   width: 100%;
   padding: 1.5rem 1.25rem;
   text-align: center;
@@ -814,13 +999,13 @@ body {
 }
 
 .modal-icon {
-  font-size: 2.6rem;
-  margin-bottom: 0.4rem;
+  font-size: 2.5rem;
+  margin-bottom: 0.35rem;
 }
 
 .modal-card h3 {
   font-size: 1.25rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.45rem;
 }
 
 .gold-text {
@@ -828,17 +1013,18 @@ body {
 }
 
 .modal-text {
-  font-size: 0.88rem;
+  font-size: 0.87rem;
   color: var(--text-muted);
-  margin-bottom: 1.1rem;
+  margin-bottom: 1rem;
   line-height: 1.45;
 }
 
 .modal-pin-box {
-  background: rgba(0, 0, 0, 0.3);
-  padding: 0.85rem;
+  background: rgba(0, 0, 0, 0.32);
+  padding: 0.9rem;
   border-radius: var(--radius-md);
   margin-bottom: 1rem;
+  border: 1px solid rgba(251, 191, 36, 0.25);
 }
 
 .modal-pin-box label {
@@ -846,21 +1032,28 @@ body {
   font-size: 0.85rem;
   color: var(--gold-light);
   margin-bottom: 0.45rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .pin-input {
   text-align: center;
-  font-size: 1.35rem;
-  letter-spacing: 0.35em;
+  font-size: 1.25rem;
+  letter-spacing: 0.2em;
   font-weight: 800;
-  max-width: 160px;
+  max-width: 210px;
   margin: 0 auto;
+}
+
+.pin-hint {
+  font-size: 0.76rem;
+  color: #cbd5e1;
+  margin-top: 0.45rem;
 }
 
 .pin-error {
   color: #fca5a5;
   font-size: 0.8rem;
+  font-weight: 600;
   margin-top: 0.45rem;
 }
 
@@ -888,8 +1081,20 @@ body {
   font-size: 0.9rem;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
   z-index: 120;
+  text-align: center;
 }
 
 .hidden {
   display: none !important;
+}
+
+@media (max-width: 440px) {
+  .add-optional-row,
+  .wish-inputs-grid {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+  .pin-custom-input {
+    max-width: 100%;
+  }
 }

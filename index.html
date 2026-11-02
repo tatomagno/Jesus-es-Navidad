@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Papá Noel Invisible - ¡Navidad es Jesús!</title>
-  <meta name="description" content="Sorteo sorpresa de Papá Noel Invisible. Tocá tu nombre y descubrí a quién te toca hacerle un regalo en esta Navidad." />
+  <meta name="description" content="Sorteo sorpresa de Papá Noel Invisible. Tocá tu nombre, ingresá tu clave y descubrí a quién te toca hacerle un regalo en esta Navidad." />
   <meta property="og:title" content="🎄 Sorteo Papá Noel Invisible - ¡Navidad es Jesús!" />
   <meta property="og:description" content="Entrá al link, elegí tu nombre y descubrí de forma secreta a quién te toca regalarle." />
   <meta property="og:image" content="sorteo navidad.jpeg" />
@@ -51,18 +51,28 @@
       </div>
 
       <div class="form-group">
-        <label for="participant-input">Agregar participantes <span id="participant-count-badge" class="count-badge">0 cargados</span></label>
-        <div class="add-row">
-          <input type="text" id="participant-input" class="text-input" placeholder="Escribí un nombre y presioná Enter..." autocomplete="off" />
-          <button type="button" id="btn-add-participant" class="btn btn-gold" title="Agregar participante">
-            + Agregar
-          </button>
+        <label for="participant-input">
+          <span>Agregar participantes</span>
+          <span id="participant-count-badge" class="count-badge">0 cargados</span>
+        </label>
+        <div class="add-person-box">
+          <div class="add-row">
+            <input type="text" id="participant-input" class="text-input" placeholder="Nombre (ej: Juan)..." autocomplete="off" />
+            <button type="button" id="btn-add-participant" class="btn btn-gold" title="Agregar participante">
+              + Agregar
+            </button>
+          </div>
+          <div class="add-optional-row">
+            <input type="text" id="participant-wish-input" class="text-input input-sm" placeholder="👕🎁 Talles o qué le gustaría (opcional, o lo completa después)" maxlength="140" />
+            <input type="text" id="participant-pin-input" class="text-input input-sm pin-custom-input" placeholder="🔐 Clave (opcional)" maxlength="12" />
+          </div>
         </div>
+
         <button type="button" id="btn-toggle-bulk" class="btn-link">
           📋 ¿Tenés una lista de WhatsApp? Pegar varios nombres juntos
         </button>
         <div id="bulk-paste-box" class="bulk-box hidden">
-          <textarea id="bulk-textarea" class="text-input" rows="4" placeholder="Pegá acá los nombres separados por coma o uno debajo del otro..."></textarea>
+          <textarea id="bulk-textarea" class="text-input" rows="4" placeholder="Pegá acá los nombres separados por coma o uno por línea..."></textarea>
           <button type="button" id="btn-confirm-bulk" class="btn btn-secondary btn-sm">Cargar todos a la lista</button>
         </div>
       </div>
@@ -73,13 +83,27 @@
         <ul id="participants-chips" class="chips-list"></ul>
       </div>
 
-      <!-- Opciones extra de privacidad -->
+      <!-- Opciones de Clave / Privacidad (ACTIVADO POR DEFECTO) -->
       <div class="privacy-box">
-        <label class="checkbox-label">
-          <input type="checkbox" id="chk-use-pins" />
-          <span>🔐 <strong>Proteger con PIN de 4 dígitos (opcional):</strong> Le asigna una clave corta a cada persona para que nadie pueda tocar otro nombre por curiosidad.</span>
+        <div class="privacy-title">🔐 Protección con Clave Personal</div>
+        <label class="radio-option">
+          <input type="radio" name="pin-mode" value="self" checked />
+          <span><strong>Cada uno crea su clave al entrar (Recomendado):</strong> Cuando una persona toca su nombre por primera vez, inventa su clave secreta y anota sus talles/deseos.</span>
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="pin-mode" value="organizer" />
+          <span><strong>Generar un PIN de 4 dígitos por persona:</strong> El sistema le asigna un código de 4 números a cada uno (o el que vos hayas escrito arriba) y se lo pide sí o sí para ver su sobre.</span>
         </label>
       </div>
+
+      <!-- Sincronización en la nube opcional entre celulares -->
+      <details class="cloud-sync-details">
+        <summary>☁️ Sincronizar claves y deseos entre distintos celulares en tiempo real (opcional)</summary>
+        <div class="cloud-sync-body">
+          <p>Por defecto, cada participante puede enviar sus talles/deseos al grupo de WhatsApp con 1 botón. Si además querés que lo que escriban se guarde en una base de datos en vivo entre todos los celulares, pegá la URL de tu Firebase Realtime Database gratuita (ej: <code>https://tu-proyecto-default-rtdb.firebaseio.com</code>):</p>
+          <input type="url" id="cloud-db-url-input" class="text-input input-sm mt-2" placeholder="https://tu-base-rtdb.firebaseio.com (opcional)" />
+        </div>
+      </details>
 
       <div id="organizer-error" class="alert-error hidden"></div>
 
@@ -100,18 +124,15 @@
 
       <!-- Advertencia si se está abriendo como archivo local file:// -->
       <div id="local-file-warning" class="alert-warning hidden">
-        <strong>💡 Atención: Estás abriendo la app desde una carpeta de tu PC (`file://`)</strong>
-        <p>Para que el link funcione en los celulares de los demás por WhatsApp, tenés dos opciones muy fáciles:</p>
-        <ul>
-          <li><strong>Opción 1 (Subir gratis en 10 segundos):</strong> Arrastrá la carpeta <code>sorteo</code> a <a href="https://app.netlify.com/drop" target="_blank" rel="noopener">Netlify Drop</a> o subila a GitHub Pages / Vercel. Si pegás abajo la dirección web donde la subiste, el link se actualiza solo:</li>
-        </ul>
+        <strong>💡 Atención: Estás abriendo la app desde tu PC (`file://`)</strong>
+        <p>Para que el link abra en los celulares de los demás por WhatsApp, arrastrá la carpeta <code>sorteo</code> a <a href="https://app.netlify.com/drop" target="_blank" rel="noopener">Netlify Drop</a> (gratis en 10 segundos) y pegá acá la dirección web que te dé:</p>
         <input type="url" id="custom-base-url" class="text-input mt-2" placeholder="Ej: https://mi-sorteo-navidad.netlify.app" />
       </div>
 
       <!-- Bloque principal: Link Único General para el Grupo -->
       <div class="share-box highlight-share">
         <h3>🌟 Link Único para el Grupo de WhatsApp</h3>
-        <p class="share-desc">Mandá este único enlace al grupo. Cada persona entra desde su celular, toca su nombre y descubre a quién le regala:</p>
+        <p class="share-desc">Mandá este enlace al grupo. Cada persona entra desde su celular, toca su nombre, ingresa su clave, ve a quién le regala y anota sus talles o deseos:</p>
         
         <div class="url-copy-row">
           <input type="text" id="group-share-url" class="text-input url-input" readonly />
@@ -125,19 +146,19 @@
             📲 Enviar al Grupo de WhatsApp
           </a>
           <button type="button" id="btn-preview-group" class="btn btn-secondary">
-            👀 Probar cómo lo ven ellos
+            👀 Entrar al Sorteo (Probar)
           </button>
         </div>
       </div>
 
-      <!-- Si activó PINs o si quiere links individuales -->
+      <!-- Tabla de PINs y Links individuales -->
       <div class="individual-links-section">
         <button type="button" id="btn-toggle-individual" class="btn-accordion">
-          <span>🔒 Ver links individuales por persona <span id="pins-indicator-text"></span></span>
+          <span>🔑 Ver claves (PINs) y links individuales de cada persona</span>
           <span class="chevron">▼</span>
         </button>
-        <div id="individual-links-list" class="individual-list hidden">
-          <p class="small-note">También podés mandarle a cada uno su link personal por privado (al abrirlo, va directo a su nombre sin que pueda ver a los demás):</p>
+        <div id="individual-links-list" class="individual-list">
+          <p class="small-note" id="ind-list-explanation">Acá tenés las claves de acceso y el link individual de cada participante por si querés mandárselo por privado:</p>
           <ul id="individual-items-ul" class="ind-ul"></ul>
         </div>
       </div>
@@ -156,16 +177,16 @@
     <section id="view-participant-list" class="card-panel hidden">
       <div class="panel-header">
         <h2>🎄 ¿Quién sos?</h2>
-        <p>Tocá <strong>únicamente tu nombre</strong> en la lista para descubrir a quién te toca hacerle un regalo en esta Navidad.</p>
+        <p>Tocá <strong>tu nombre</strong> para ingresar tu clave, ver a quién le regalás y dejar anotados tus talles o qué te gustaría recibir.</p>
       </div>
 
       <!-- Aviso si este celular ya abrió un sobre antes -->
       <div id="already-opened-banner" class="saved-device-banner hidden">
         <div>
-          <strong>📱 En este celular ya abriste el sobre de <span id="saved-person-name"></span></strong>
-          <p>Tocá el botón para volver a ver a quién te tocó regalarle.</p>
+          <strong>📱 En este dispositivo ya abriste el sobre de <span id="saved-person-name"></span></strong>
+          <p>Tocá el botón para entrar a tu sobre o editar tus talles/deseos.</p>
         </div>
-        <button type="button" id="btn-reopen-saved" class="btn btn-gold btn-sm">Ver mi asignado</button>
+        <button type="button" id="btn-reopen-saved" class="btn btn-gold btn-sm">Abrir mi sobre</button>
       </div>
 
       <div class="search-filter-box" id="participant-search-box">
@@ -174,16 +195,25 @@
 
       <div id="participant-buttons-grid" class="participant-grid"></div>
 
+      <!-- Cartelera pública de Talles y Deseos de todos los participantes -->
+      <div class="wishes-board-box">
+        <div class="wishes-board-header">
+          <h3>📝 Lista de Talles y Deseos del Grupo</h3>
+          <p>Acá aparecen las pistas, talles y deseos que dejó cada participante para ayudar a su Papá Noel Invisible:</p>
+        </div>
+        <ul id="public-wishes-list" class="wishes-ul"></ul>
+      </div>
+
       <div class="divider"></div>
       <div class="footer-actions">
         <button type="button" id="btn-go-organizer" class="btn-link">
-          ⚙️ ¿Sos el organizador? Crear un nuevo sorteo
+          ⚙️ ¿Sos el organizador? Crear o editar sorteo
         </button>
       </div>
     </section>
 
     <!-- ==========================================
-         VISTA 4: REVELACIÓN SORPRESA DEL REGALO
+         VISTA 4: REVELACIÓN SORPRESA + DESEOS/TALLES
          ========================================== -->
     <section id="view-reveal" class="card-panel hidden">
       <div class="reveal-header">
@@ -208,6 +238,13 @@
         <div class="receiver-card">
           <div class="receiver-stars">🌟 🎄 🌟</div>
           <div class="receiver-name" id="reveal-receiver-name">---</div>
+          
+          <!-- Pistas / Talles / Deseos de la persona que te tocó -->
+          <div id="receiver-wish-box" class="receiver-wish-card">
+            <div class="receiver-wish-title">👕🎁 Qué le gustaría / Talles de <span id="receiver-wish-owner"></span>:</div>
+            <p id="receiver-wish-text" class="receiver-wish-content"></p>
+          </div>
+
           <p class="receiver-blessing">¡Que sea una hermosa sorpresa! Guardá el secreto hasta el día de Navidad.</p>
         </div>
 
@@ -215,9 +252,40 @@
           <button type="button" id="btn-download-ticket" class="btn btn-gold">
             📥 Guardar tarjeta recordatorio en mi celu
           </button>
-          <button type="button" id="btn-hide-result" class="btn btn-secondary">
-            🙈 Ocultar nombre en pantalla
+          <button type="button" id="btn-hide-result" class="btn btn-secondary btn-sm">
+            🙈 Ocultar nombre arriba
           </button>
+        </div>
+
+        <!-- SECCIÓN PARA QUE EL PARTICIPANTE ESCRIBA SUS PROPIOS TALLES Y DESEOS -->
+        <div class="my-wish-editor-card">
+          <h3>✍️ Mis Talles y Qué me gustaría recibir</h3>
+          <p class="my-wish-sub">Dejá anotados tus talles o ideas cortas para que a tu Papá Noel Invisible le sea re fácil elegir tu regalo:</p>
+          
+          <div class="wish-inputs-grid">
+            <div>
+              <label for="my-size-clothes">👕 Talle Ropa (Remera/Pantalón)</label>
+              <input type="text" id="my-size-clothes" class="text-input input-sm" placeholder="Ej: Remera L, Pantalón 42" maxlength="50" />
+            </div>
+            <div>
+              <label for="my-size-shoes">👟 Calzado</label>
+              <input type="text" id="my-size-shoes" class="text-input input-sm" placeholder="Ej: 41" maxlength="25" />
+            </div>
+          </div>
+
+          <div class="form-group mt-2">
+            <label for="my-wish-notes">🎁 ¿Qué te gustaría que te regalen o qué gustos tenés?</label>
+            <textarea id="my-wish-notes" class="text-input" rows="2" placeholder="Ej: Perfume, libro, auriculares, chocolates, algo de jardín..." maxlength="180"></textarea>
+          </div>
+
+          <div class="wish-save-actions">
+            <button type="button" id="btn-save-my-wish" class="btn btn-primary">
+              💾 Guardar mis talles y deseos
+            </button>
+            <a id="btn-wa-my-wish" href="#" target="_blank" rel="noopener" class="btn btn-whatsapp">
+              📲 Mandar mis talles/deseos al grupo de WhatsApp
+            </a>
+          </div>
         </div>
 
         <div class="other-person-link-wrap">
@@ -230,23 +298,24 @@
   </main>
 
   <!-- ==========================================
-       MODAL DE CONFIRMACIÓN DE IDENTIDAD (+ PIN)
+       MODAL DE CONFIRMACIÓN Y CLAVE PERSONAL
        ========================================== -->
   <div id="confirm-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
-      <div class="modal-icon">🎅</div>
-      <h3>¿Confirmás que sos <span id="modal-person-name" class="gold-text"></span>?</h3>
-      <p class="modal-text">Recordá que la magia del Papá Noel Invisible es que sea <strong>100% sorpresa</strong>. Solo abrí tu propio nombre.</p>
+      <div class="modal-icon">🔐</div>
+      <h3>Hola, <span id="modal-person-name" class="gold-text"></span></h3>
+      <p id="modal-instruction-text" class="modal-text"></p>
 
-      <div id="modal-pin-section" class="modal-pin-box hidden">
-        <label for="modal-pin-input">🔐 Ingresá tu PIN de 4 dígitos:</label>
-        <input type="tel" id="modal-pin-input" class="text-input pin-input" placeholder="0000" maxlength="4" pattern="[0-9]*" inputmode="numeric" />
-        <p id="modal-pin-error" class="pin-error hidden">PIN incorrecto. Pedíselo al organizador del sorteo.</p>
+      <div id="modal-pin-section" class="modal-pin-box">
+        <label id="modal-pin-label" for="modal-pin-input">🔑 Tu clave secreta:</label>
+        <input type="password" id="modal-pin-input" class="text-input pin-input" placeholder="••••" maxlength="12" autocomplete="off" />
+        <p id="modal-pin-hint" class="pin-hint"></p>
+        <p id="modal-pin-error" class="pin-error hidden"></p>
       </div>
 
       <div class="modal-buttons">
-        <button type="button" id="btn-modal-cancel" class="btn btn-secondary">No, volver</button>
-        <button type="button" id="btn-modal-confirm" class="btn btn-primary">¡Sí, soy yo! Ver mi sobre</button>
+        <button type="button" id="btn-modal-cancel" class="btn btn-secondary">Cancelar</button>
+        <button type="button" id="btn-modal-confirm" class="btn btn-primary">🔓 Entrar a mi sobre</button>
       </div>
     </div>
   </div>
